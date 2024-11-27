@@ -179,10 +179,9 @@ $$ \int_{\Omega} \frac{\rho C_p}{\Delta t} T_{n+1} v dx + k \int_{\Omega} \nabla
 
 On peut obtenir donc la valeur du champ $T_{n+1}$ a partir du champ $T_n$ a chaque instant. 
 
-Nous choisissons un pas de discretisation $dt = 60s$. 
-
-On observe une phase stationnaire au bout de 300 minutes environ, soit 5 heures. 
-Voici le champ de temperature sur 7 instants differents, du debut a la fin de la phase stationnaire
+Nous choisissons un pas de discrétisation $\Delta t = 60$ s.
+On observe une phase stationnaire au bout de 300 minutes environ, soit 5 heures.
+Voici le champ de température sur 7 instants différents, du début à la fin de la phase stationnaire.
 
 ![alt text](figs/recordingv0.png)
 
