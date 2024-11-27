@@ -78,7 +78,6 @@ solve Laplace(u, v)
     + on(awind, u=tempwindow)
      + on(bwind, u=tempwindow)
      + on(dwind, u=tempwindow)
-
      + on(a, u =tempwindow )
       + on(b, u =tempwindow )
        + on(c1, u =tempwindow )

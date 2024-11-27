@@ -1,64 +1,118 @@
-## Equation de chaleur 
+Je vais reformater ce document en Markdown tout en préservant sa structure et son contenu mathématique.
 
-### Introduction 
+# Équation de chaleur
 
-Le probleme d'equation de chaleur proposé consiste à déterminer la distribution de chaleur d'une pièce, compte tenu des sources de chaleur et de froid presentes dans la piece, notamment un radiateur, des murs et une fenetre ouverte.
+## Introduction
 
-On donnera une approximation par calcul numerique de la solution stationnaire pour le champ de temperature T, pour trois ensembles de conditions initiales differentes. 
+Le problème d'équation de chaleur proposé consiste à déterminer la distribution de chaleur d'une pièce, compte tenu des sources de chaleur et de froid présentes dans la pièce, notamment un radiateur, des murs et une fenêtre ouverte.
 
-Ensuite nous determinerons la solution transitoire pour le champ de temperature T par calcul numerique. 
+On donnera une approximation par calcul numérique de la solution stationnaire pour le champ de température T, pour trois ensembles de conditions initiales différentes.
 
-Nous utiliserons pour ceci le cours sur la methode des elements finis, et donc une formulation variationelle du probleme, ainsi que le logiciel de calcul numerique FreeFEM++.
+Ensuite nous déterminerons la solution transitoire pour le champ de température T par calcul numérique.
 
-### Probleme Stationnaire 
+Nous utiliserons pour ceci le cours sur la méthode des éléments finis, et donc une formulation variationnelle du problème, ainsi que le logiciel de calcul numérique FreeFEM++.
 
-Le probleme stationnaire est le suivant :
+## Problème Stationnaire
 
-$$ k \laplacien T = 0  $$ 
+Le problème stationnaire est le suivant :
 
-Notons $ Omega$ la piece et $ Gamma $  les bords de la piece. $ Gamma =Gamma1 + Gamma2 + Gamma3 $ ou $ Gamma1 $ est les murs de la piece,   $ Gamma2 $ designe les bords du radiateur, et $ Gamma3 $ designe les bords de la fenetre.
+$$ k \Delta T = 0 $$
 
-D'ou 
-$$ \int_\omega v k laplacien T = 0  $$ 
-D'apres la formulation de Green pour le champ de temperature T, qui est $C^1$:
+Notons $\Omega$ la pièce et $\Gamma$ les bords de la pièce. $\Gamma = \Gamma_1 + \Gamma_2 + \Gamma_3$ où $\Gamma_1$ est les murs de la pièce, $\Gamma_2$ désigne les bords du radiateur, et $\Gamma_3$ désigne les bords de la fenêtre.
 
-$$ \int_\omega v laplacien T = \int_\omega grad v . grad T dx +   \int_\Gamma v(x) ∂_n T dx   $$
+D'où :
 
-On a l'equation finale suivante 
-$$  \int_\omega k grad v . grad T dx +   \int_\Gamma k v(x) ∂_n T dx = 0  $$ 
+$$ \int_\Omega v k \Delta T = 0 $$
 
-### Cas 1 : Flux de chaleur au mur 
+D'après la formulation de Green pour le champ de température T, qui est $C^1$:
 
-On considere les conditions suivantes au bord: 
-Bord de la fenêtre Température imposée T = -2◦C ;
-Mur Flux de chaleur imposée Phi = k∇T ·n = −0.31W/m3
-Radiateur Température imposée T = 50◦C.
+$$ \int_\Omega v \Delta T = \int_\Omega \nabla v \cdot \nabla T dx + \int_\Gamma v(x) \partial_n T dx $$
 
-On a donc l'equation 
+On a l'équation finale suivante :
 
-$$  \int_\omega k grad v . grad T dx +   \int_\Gamma v(x) Phi dx = 0  $$ 
+$$ \int_\Omega k \nabla v \cdot \nabla T dx + \int_\Gamma k v(x) \partial_n T dx = 0 $$
 
+## Cas 1 : Flux de chaleur au mur
 
-On integre avec le solveur Conjugate Gradient de FreeFem 
+On considère les conditions suivantes au bord:
+- Bord de la fenêtre : Température imposée T = -2°C
+- Mur : Flux de chaleur imposée Φ = k∇T·n = −0.31W/m³
+- Radiateur : Température imposée T = 50°C
 
-Code 
-solve Laplace(u, v)
-    = int2d(Th)(    // The bilinear part
-          dx(u)*dx(v)
-        + dy(u)*dy(v)
+On a donc l'équation :
+
+$$ \int_\Omega k \nabla v \cdot \nabla T dx + \int_\Gamma v(x) \Phi dx = 0 $$
+
+On intègre avec le solveur Conjugate Gradient de FreeFem :
+
+```cpp
+solve Laplace(u, v) = 
+    int2d(Th)(    // The bilinear part
+        dx(u)*dx(v) + dy(u)*dy(v)
     )
-    +  int1d(Th,c1,c2,a,b,d)( flux / kheat * v )
-    //  +  int1d(Th, c2)( 0.31 / kheat * v )
+    + int1d(Th,c1,c2,a,b,d)( flux / kheat * v )
+    //+ int1d(Th, c2)( 0.31 / kheat * v )
     + on(arad, u=tempradiator)
-     + on(brad, u=tempradiator)
-     + on(crad, u=tempradiator)
-     + on(drad, u=tempradiator)
-
+    + on(brad, u=tempradiator)
+    + on(crad, u=tempradiator)
+    + on(drad, u=tempradiator)
     + on(awind, u=tempwindow)
-     + on(bwind, u=tempwindow)
-     + on(dwind, u=tempwindow)
-    ;
+    + on(bwind, u=tempwindow)
+    + on(dwind, u=tempwindow);
+```
 
-On obtient
+Resultats :
+
+Avec un flux de chaleur nulle au niveau du mur ( $\Phi = 0 $), on obtient le champ stationnaire suivant 
+![alt text](figs/cond1_flux_0.png)
+
+Avec un flux de chaleur non nulle au niveau du mur ( $\Phi = 0.31 W/mK $), on obtient le champ stationnaire suivant 
+![alt text](figs/cond1_flux_031.png)
 
 
+# Cas 2 : Condition de Fourier au niveau du radiateur
+
+Les conditions aux bords sont alors :
+
+- Bord de la fenêtre : Température imposée T = -2°C
+- Mur : Température imposée T = -2°C
+- Radiateur : Condition de Fourier k∇T·n + h(T - Tf) = 0, avec h = 1W/(m°C) et Tf = 50°C
+
+L'équation devient :
+
+$$ \int_\Omega k \nabla v \cdot \nabla T dx + \int_\Gamma v(x) \frac{h}{k} (T - T_f) dx = 0 $$
+
+On introduit le terme bilinéaire dans le solveur :
+
+```cpp
+solve Laplace(u, v) = 
+    int2d(Th)(    // The bilinear part
+        dx(u)*dx(v) + dy(u)*dy(v)
+    )
+    + int1d(Th,arad,brad,crad,drad)( v * hfourier / kheat * u)
+    - int1d(Th,arad,brad,crad,drad)( v * hfourier / kheat * tempradiator )
+    + on(awind, u=tempwindow)
+    + on(bwind, u=tempwindow)
+    + on(dwind, u=tempwindow)
+    + on(a, u=tempwindow)
+    + on(b, u=tempwindow)
+    + on(c1, u=tempwindow)
+    + on(c2, u=tempwindow)
+    + on(d, u=tempwindow);
+```
+
+Résultats :
+
+![alt text](figs/cond2.png)
+
+# Cas 3 : Condition de Fourier au niveau du mur
+
+Les conditions aux bords sont alors :
+
+- Bord de la fenêtre : Température imposée T = -2°C
+- Mur : Condition de Fourier k∇T·n + h(T - Tf) = 0, avec h = 1W/(m°C) et Tf = -2°C
+- Radiateur : Température imposée T = 50°C
+
+Résultats :
+
+![alt text](figs/cond3.png)
