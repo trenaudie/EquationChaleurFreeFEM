@@ -40,7 +40,7 @@ $$b_{\text{wind}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{length} - \text{wind
 $$d_{\text{wind}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{length}, \text{length} - \text{windowwidth}], y = \text{depthwindow}\}$$
 
 
-Voici l'espace cree, et convertit en maillage, dans FreeFEM++ 
+Voici l'espace créé, et convertit en maillage, dans FreeFEM++ 
 
 ![alt text](figs/room.png)
 
