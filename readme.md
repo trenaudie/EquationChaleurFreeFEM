@@ -12,8 +12,40 @@ Ensuite nous déterminerons la solution transitoire pour le champ de températur
 
 Nous utiliserons pour ceci le cours sur la méthode des éléments finis, et donc une formulation variationnelle du problème, ainsi que le logiciel de calcul numérique FreeFEM++.
 
-## Problème Stationnaire
+# Problème Stationnaire
 
+Voici le texte avec les accents corrigés :
+
+### La Pièce
+Nous étudions un espace de vie rectangulaire, en deux dimensions, de largeur de 2,5m environ et de longueur 3,3m environ. On place un radiateur dans la pièce, d'un côté, et on considère qu'une fenêtre est ouverte de l'autre côté. On étudie alors le champ de température qui s'établit dans la pièce. 
+
+Voici les bords. L'espace de la pièce se trouve à gauche, dans le sens du chemin choisi ci-dessous.
+
+**Bords du mur** 
+$$a = \{(x,y) \in \mathbb{R}^2 : x = 0, y \in [0,\text{width}]\}$$
+$$b = \{(x,y) \in \mathbb{R}^2 : x \in [0,\text{length}], y = \text{width}\}$$
+$$c_1 = \{(x,y) \in \mathbb{R}^2 : x = \text{length}, y \in [0,\text{depthwindow}]\}$$
+$$c_2 = \{(x,y) \in \mathbb{R}^2 : x = \text{length}, y \in [\text{depthwindow} + \text{windowlength}, \text{width}]\}$$
+$$d = \{(x,y) \in \mathbb{R}^2 : x \in [0,\text{length}], y = 0\}$$
+
+**Bords du radiateur** 
+$$a_{\text{rad}} = \{(x,y) \in \mathbb{R}^2 : x = \text{depthleft}, y \in [\text{depthbottom}, \text{depthbottom} + \text{lengthradiator}]\}$$
+$$b_{\text{rad}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{depthleft}, \text{depthleft} + \text{widthradiator}], y = \text{depthbottom} + \text{lengthradiator}\}$$
+$$c_{\text{rad}} = \{(x,y) \in \mathbb{R}^2 : x = \text{depthleft} + \text{widthradiator}, y \in [\text{depthbottom}, \text{depthbottom} + \text{lengthradiator}]\}$$
+$$d_{\text{rad}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{depthleft} + \text{widthradiator}, \text{depthleft}], y = \text{depthbottom}\}$$
+
+**Bords de la fenêtre** 
+$$a_{\text{wind}} = \{(x,y) \in \mathbb{R}^2 : x = \text{length} - \text{windowwidth}, y \in [\text{depthwindow}, \text{depthwindow} + \text{windowlength}]\}$$
+$$b_{\text{wind}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{length} - \text{windowwidth}, \text{length}], y = \text{depthwindow} + \text{windowlength}\}$$
+$$d_{\text{wind}} = \{(x,y) \in \mathbb{R}^2 : x \in [\text{length}, \text{length} - \text{windowwidth}], y = \text{depthwindow}\}$$
+
+
+Voici l'espace cree, et convertit en maillage, dans FreeFEM++ 
+
+![alt text](figs/room.png)
+
+
+### Formulation de l'equation de chaleur
 Le problème stationnaire est le suivant :
 
 $$ k \Delta T = 0 $$
@@ -70,7 +102,7 @@ Avec un flux de chaleur non nulle au niveau du mur ( $\Phi = 0.31 W/mK $), on ob
 ![alt text](figs/cond1_flux_031.png)
 
 
-# Cas 2 : Condition de Fourier au niveau du radiateur
+## Cas 2 : Condition de Fourier au niveau du radiateur
 
 Les conditions aux bords sont alors :
 
@@ -105,7 +137,7 @@ Résultats :
 
 ![alt text](figs/cond2.png)
 
-# Cas 3 : Condition de Fourier au niveau du mur
+## Cas 3 : Condition de Fourier au niveau du mur
 
 Les conditions aux bords sont alors :
 
@@ -116,3 +148,48 @@ Les conditions aux bords sont alors :
 Résultats :
 
 ![alt text](figs/cond3.png)
+
+
+# Problème Transitoire
+
+On etudie dorenavant le regime transitoire, lorsque le radiateur est allume. 
+On considere que la piece est d'une temperature intiale uniforme a $T_0 = - 2 C$ 
+
+## Formulation variationnelle du problème 
+
+L'équation du régime transitoire est la suivante :
+
+$$ \rho C_p \frac{\partial T}{\partial t} + k \Delta T = 0 $$
+
+On choisit de résoudre cette équation avec la Méthode Euler Implicite, qui est plus rapide que la méthode Euler explicite.
+
+On discrétise donc les opérateurs par rapport au temps :
+
+$$ \frac{T_{n+1} - T_n}{\Delta t} \approx \frac{\partial T}{\partial t} $$
+$$ \Delta T_{n+1} \approx \Delta T $$
+
+On réécrit alors l'équation d'inconnue $T_{n+1} = T(t_{n+1})$ :
+
+$$ \rho C_p \frac{T_{n+1} - T_n}{\Delta t} + k \Delta T_{n+1} = 0 $$
+
+On passe a une formulation variationnelle du probleme:
+
+$$ \int_\Omega \left(\rho C_p \frac{T_{n+1} - T_n}{\Delta t} + k \Delta T_{n+1}\right) v dx = 0 $$
+$$ \int_{\Omega} \frac{\rho C_p}{\Delta t} T_{n+1} v dx + k \int_{\Omega} \nabla T_{n+1} \cdot \nabla v dx = \int_{\Omega} \frac{\rho C_p}{\Delta t} T_n v dx$$
+
+On peut obtenir donc la valeur du champ $T_{n+1}$ a partir du champ $T_n$ a chaque instant. 
+
+Nous choisissons un pas de discretisation $dt = 60s$. 
+
+On observe une phase stationnaire au bout de 300 minutes environ, soit 5 heures. 
+Voici le champ de temperature sur 7 instants differents, du debut a la fin de la phase stationnaire
+
+![alt text](figs/recordingv0.png)
+
+![alt text](figs/recording1.png)
+![alt text](figs/recording2.png)
+![alt text](figs/recording3.png)
+![alt text](figs/recording4.png)
+![alt text](figs/recording5.png)
+![alt text](figs/recording6.png)
+![alt text](figs/recording7.png)
