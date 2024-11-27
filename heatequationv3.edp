@@ -1,0 +1,91 @@
+// this v2 version implements fourier condition on the radiator (2nd condition in the exercise)
+// Room dimensions
+real width = 2.55;
+real length = 3.3;
+
+// Window parameters
+real windowlength = 0.81;
+real windowwidth = 0.1;
+real depthwindow = width/2 - windowlength/2;
+
+// Radiator parameters
+real depthleft = 0.15;
+real depthbottom = 0.8;
+real lengthradiator = 0.5;
+real widthradiator = 0.1;
+real tempradiator = 50 + 273.15;
+real tempwindow = -2 + 273.15;
+real kheat = 0.25;
+real flux = 0.;
+real hfourier = 1 ;
+
+
+// Room borders
+// label = 2 
+border a(t=width, 0) {x=0; y=t; }
+border b(t=length, 0) {x=t; y=width;}
+border c1(t=0, depthwindow) {x=length; y=t;}
+border c2(t = depthwindow + windowlength, width) {x = length; y = t;}
+border d(t=0, length) {x=t; y=0;}
+
+// Radiator borders
+border arad(t=depthbottom , depthbottom + lengthradiator ) {x=depthleft; y=t;}
+border brad(t=depthleft , depthleft + widthradiator) {x=t; y=depthbottom + lengthradiator;}
+border crad(t=depthbottom + lengthradiator, depthbottom ) {x=depthleft + widthradiator; y=t;}
+border drad(t= depthleft + widthradiator , depthleft ) {x=t; y=depthbottom;}
+
+// Window borders
+border awind(t=depthwindow , depthwindow + windowlength) {x=length - windowwidth; y=t;}
+border bwind(t= length - windowwidth, length) {x=t; y=depthwindow + windowlength;}
+// border cwind(t=depthwindow, depthwindow + windowlength) {x=length; y=t;}
+border dwind(t=length , length  - windowwidth) {x=t; y=depthwindow;}
+
+
+
+
+int Maillage = 100;
+mesh Th = buildmesh(
+  a(Maillage)    // Left wall
+    + b(Maillage) // Top wall
+    + c1(Maillage)  // Right wall
+    + c2(Maillage)
+    + d(Maillage) // Bottom wall
+    // Radiator
+    + arad(Maillage)
+    + brad(Maillage)
+    + crad(Maillage)
+    + drad(Maillage)
+    // Window
+    + awind(Maillage)
+    + bwind(Maillage)
+    // + cwind(30)
+    + dwind(Maillage)
+    );
+
+
+// The finite element space defined over Th is called here Vh
+fespace Vh(Th, P1);
+Vh u, v;// Define u and v 
+
+// Solve
+solve Laplace(u, v)
+    = int2d(Th)(    // The bilinear part
+          dx(u)*dx(v)
+        + dy(u)*dy(v)
+    )
+    +  int1d(Th,a,b,c1,c2,d)( v * hfourier / kheat * u)
+    - int1d(Th,a,b,c1,c2,d)( v * hfourier / kheat * tempwindow )
+
+    + on(arad, u=tempradiator)
+     + on(brad, u=tempradiator)
+     + on(crad, u=tempradiator)
+     + on(drad, u=tempradiator)
+
+    + on(awind, u=tempwindow)
+     + on(bwind, u=tempwindow)
+     + on(dwind, u=tempwindow)
+
+    ;
+
+plot(u, value=true, fill=true);
+
