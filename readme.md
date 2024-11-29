@@ -1,10 +1,14 @@
-Je vais reformater ce document en Markdown tout en préservant sa structure et son contenu mathématique.
+Rapport de projet 
+Cours Methode des Elements Finis
+Ecrit par :
+Tanguy RENAUDIE
+Philippe Chaumet-Riffaud 
 
 # Équation de chaleur
 
 ## Introduction
 
-Le problème d'équation de chaleur proposé consiste à déterminer la distribution de chaleur d'une pièce, compte tenu des sources de chaleur et de froid présentes dans la pièce, notamment un radiateur, des murs et une fenêtre ouverte.
+Le problème d'équation de chaleur proposé consiste à déterminer la distribution de chaleur $T$ d'une pièce, compte tenu des "sources" dans la pièce, notamment un radiateur, des murs et une fenêtre ouverte.
 
 On donnera une approximation par calcul numérique de la solution stationnaire pour le champ de température T, pour trois ensembles de conditions initiales différentes.
 
@@ -98,7 +102,7 @@ Resultats :
 Avec un flux de chaleur nulle au niveau du mur ( $\Phi = 0 $), on obtient le champ stationnaire suivant 
 ![alt text](figs/cond1_flux_0.png)
 
-Avec un flux de chaleur non nulle au niveau du mur ( $\Phi = 0.31 W/mK $), on obtient le champ stationnaire suivant 
+Avec un flux de chaleur non nul au niveau du mur ( $\Phi = 0.31 W/m $), on obtient le champ stationnaire suivant 
 ![alt text](figs/cond1_flux_031.png)
 
 
@@ -178,10 +182,10 @@ $$ \int_\Omega \left(\rho C_p \frac{T_{n+1} - T_n}{\Delta t} + k \Delta T_{n+1}\
 $$ \int_{\Omega} \frac{\rho C_p}{\Delta t} T_{n+1} v dx + k \int_{\Omega} \nabla T_{n+1} \cdot \nabla v dx = \int_{\Omega} \frac{\rho C_p}{\Delta t} T_n v dx$$
 
 On peut obtenir donc la valeur du champ $T_{n+1}$ a partir du champ $T_n$ a chaque instant. 
-
+On pose $T_0 = -2 + 273.15 K$
 Nous choisissons un pas de discrétisation $\Delta t = 60$ s.
 On observe une phase stationnaire au bout de 300 minutes environ, soit 5 heures.
-Voici le champ de température sur 7 instants différents, du début à la fin de la phase stationnaire.
+Voici le champ de température sur 8 instants différents, du début à la fin de la phase stationnaire.
 
 ![alt text](figs/recordingv0.png)
 
