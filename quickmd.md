@@ -1,0 +1,1 @@
+$$x^{beta}=\vert \vert x\vert \vert^{\vert beta \vert }u^{beta} $$
