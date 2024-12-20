@@ -209,6 +209,7 @@ On réécrit alors l'équation d'inconnue $T_{n+1} = T(t_{n+1})$ :
 
 $$ \rho C_p \frac{T_{n+1} - T_n}{\Delta t} + k \Delta T_{n+1} = 0 $$
 
+
 On passe a une formulation variationnelle du probleme:
 
 $$ \int_\Omega \left(\rho C_p \frac{T_{n+1} - T_n}{\Delta t} + k \Delta T_{n+1}\right) v dx = 0 $$
