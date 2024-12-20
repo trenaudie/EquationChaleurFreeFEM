@@ -75,6 +75,9 @@ $$b_{wind} = \{(x,y) \in \mathbb{R}^2 : x \in [L - e_f, L], y = d_f + L_f\}$$
 
 $$d_{wind} = \{(x,y) \in \mathbb{R}^2 : x \in [L, L - e_f], y = d_f\}$$
 
+Voici la maille créée en utilisant le logiciel FreeFEM:
+
+![Alt text](figs/room.png)
 
 ## Formulation de l'équation de chaleur
 
