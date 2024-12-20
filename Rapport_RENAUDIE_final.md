@@ -45,7 +45,7 @@ On considère que la fenètre est centrée sur le mur de droite. Donc elle se tr
 
 Voici les définitions pour les segments qui constituent le mur extérieur. Notons en particulier que le mur de droite est constitué de deux segments séparés d'une fenêtre.
 
-$$a = \left\{ {(x,y) \in \mathbb{R}^2 : x = 0, y \in [0,l]} \right\}$$
+$$a = \{ {(x,y) \in \mathbb{R}^2 : x = 0, y \in [0,l]} \}$$
 
 $$b = \left\{ {(x,y) \in \mathbb{R}^2 : x \in [0,L], y = l} \right\}$$
 
