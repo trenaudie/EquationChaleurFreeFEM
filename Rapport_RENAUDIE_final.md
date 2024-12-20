@@ -47,33 +47,33 @@ Voici les définitions pour les segments qui constituent le mur extérieur. Noto
 
 $$a = \{ {(x,y) \in \mathbb{R}^2 : x = 0, y \in [0,l]} \}$$
 
-$$b = \left\{ {(x,y) \in \mathbb{R}^2 : x \in [0,L], y = l} \right\}$$
+$$b = \{ {(x,y) \in \mathbb{R}^2 : x \in [0,L], y = l} \}$$
 
-$$c_1 = \left\{(x,y) \in \mathbb{R}^2 : x = L , y \in [2d_f + L_f, d_f + L_f]\right\}$$
+$$c_1 = \{(x,y) \in \mathbb{R}^2 : x = L , y \in [2d_f + L_f, d_f + L_f]\}$$
 
-$$c_2 = \left\{(x,y) \in \mathbb{R}^2 : x = {L}, y \in [{d_f}, 0]\right\}$$
+$$c_2 = \{(x,y) \in \mathbb{R}^2 : x = {L}, y \in [{d_f}, 0]\}$$
 
-$$d = \left\{(x,y) \in \mathbb{R}^2 : x \in [0,\text{l}], y = 0\right\}$$
+$$d = \{(x,y) \in \mathbb{R}^2 : x \in [0,\text{l}], y = 0\}$$
 
 ## Bords du radiateur
 
 Nous considérons que le radiateur se trouve dans la salle, non collé à un mur. Il est placé sur le côté opposé de celui de la fenêtre.
 
-$$a_{rad} = \left\{(x,y) \in \mathbb{R}^2 : x = d_{rad_l}, y \in [d_{rad_b}, d_{rad_b} + L_{rad}]\right\}$$
+$$a_{rad} = \{(x,y) \in \mathbb{R}^2 : x = d_{rad_l}, y \in [d_{rad_b}, d_{rad_b} + L_{rad}]\}$$
 
-$$b_{rad} = \left\{(x,y) \in \mathbb{R}^2 : x \in [d_{rad_l}, d_{rad_l}+e_{rad}], y = d_{rad_b}+L_{rad}\right\}$$
+$$b_{rad} = \{(x,y) \in \mathbb{R}^2 : x \in [d_{rad_l}, d_{rad_l}+e_{rad}], y = d_{rad_b}+L_{rad}\}$$
 
-$$c_{rad} = \left\{(x,y) \in \mathbb{R}^2 : x = d_{rad_l} + e_{rad}, y \in [d_{rad_b}, d_{rad_b} + L_{rad}]\right\}$$
+$$c_{rad} = \{(x,y) \in \mathbb{R}^2 : x = d_{rad_l} + e_{rad}, y \in [d_{rad_b}, d_{rad_b} + L_{rad}]\}$$
 
-$$d_{rad} = \left\{(x,y) \in \mathbb{R}^2 : x \in [d_{rad_l} + e_{rad}, d_{rad_l}], y = d_{rad_b}\right\}$$
+$$d_{rad} = \{(x,y) \in \mathbb{R}^2 : x \in [d_{rad_l} + e_{rad}, d_{rad_l}], y = d_{rad_b}\}$$
 
 ## Bords de la fenêtre
 
-$$a_{wind} = \left\{(x,y) \in \mathbb{R}^2 : x = L - e_f, y \in [d_f, d_f + L_f]\right\}$$
+$$a_{wind} = \{(x,y) \in \mathbb{R}^2 : x = L - e_f, y \in [d_f, d_f + L_f]\}$$
 
-$$b_{wind} = \left\{(x,y) \in \mathbb{R}^2 : x \in [L - e_f, L], y = d_f + L_f\right\}$$
+$$b_{wind} = \{(x,y) \in \mathbb{R}^2 : x \in [L - e_f, L], y = d_f + L_f\}$$
 
-$$d_{wind} = \left\{(x,y) \in \mathbb{R}^2 : x \in [L, L - e_f], y = d_f\right\}$$
+$$d_{wind} = \{(x,y) \in \mathbb{R}^2 : x \in [L, L - e_f], y = d_f\}$$
 
 
 ## Formulation de l'équation de chaleur
